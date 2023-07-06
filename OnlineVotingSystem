@@ -1,0 +1,91 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Candidate {
+    private String name;
+    private int votes;
+
+    public Candidate(String name) {
+        this.name = name;
+        votes = 0;
+    }
+
+    public void addVote() {
+        votes++;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getVotes() {
+        return votes;
+    }
+}
+
+class Election {
+    private ArrayList<Candidate> candidates = new ArrayList<Candidate>();
+    private boolean isVotingOpen;
+
+    public Election() {
+        isVotingOpen = true;
+    }
+
+    public void addCandidate(Candidate candidate) {
+        candidates.add(candidate);
+    }
+
+    public void closeVoting() {
+        isVotingOpen = false;
+    }
+
+    public void vote(String name) {
+        if (isVotingOpen) {
+            for (Candidate candidate : candidates) {
+                if (candidate.getName().equals(name)) {
+                    candidate.addVote();
+                    System.out.println("Vote added for " + name);
+                    return;
+                }
+            }
+            System.out.println("Invalid candidate name");
+        } else {
+            System.out.println("Voting is closed");
+        }
+    }
+
+    public void showResults() {
+        System.out.println("Election Results:");
+        for (Candidate candidate : candidates) {
+            System.out.println(candidate.getName() + ": " + candidate.getVotes());
+        }
+    }
+}
+
+class OnlineVotingSystem {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Election election = new Election();
+
+        // Add candidates
+        election.addCandidate(new Candidate("John"));
+        election.addCandidate(new Candidate("Mary"));
+        election.addCandidate(new Candidate("Peter"));
+
+        // Start voting
+        while (true) {
+            System.out.println("Enter candidate name is John Mary Peter ");
+            System.out.println("Enter candidate name to vote (or 'done' to finish):");
+            String name = scanner.nextLine();
+            if (name.equals("done")) {
+                break;
+            } else {
+                election.vote(name);
+            }
+        }
+
+        // Close voting and show results
+        election.closeVoting();
+        election.showResults();
+    }
+}
